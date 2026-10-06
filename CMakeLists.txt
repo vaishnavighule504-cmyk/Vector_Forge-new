@@ -7,10 +7,7 @@ set(CMAKE_AUTOMOC ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-add_executable(VectorForge
-    src/main.cpp
-    src/Canvas.h
-    src/Canvas.cpp
-)
+file(GLOB SOURCES CONFIGURE_DEPENDS src/*.cpp src/*.h)
+add_executable(VectorForge ${SOURCES})
 
 target_link_libraries(VectorForge PRIVATE Qt6::Widgets)

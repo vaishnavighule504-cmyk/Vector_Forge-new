@@ -1,5 +1,6 @@
 #pragma once
 #include <QWidget>
+#include "Document.h"
 
 class Canvas : public QWidget
 {
@@ -8,4 +9,8 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *event) override;
+    void mousePressEvent(QMouseEvent *event) override;
+
+private:
+    Document m_doc;
 };
