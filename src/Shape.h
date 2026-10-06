@@ -11,6 +11,9 @@
 class Shape
 {
 public:
+    void setSelected(bool s) { m_selected = s; }
+    bool isSelected() const { return m_selected; }
+
     virtual ~Shape() = default; // virtual destructor: needed for safe delete via Shape*
 
     virtual void draw(QPainter &painter) const = 0;
@@ -24,6 +27,7 @@ public:
     void setStrokeWidth(double w) { m_width = w; }
 
 protected:
+    bool m_selected = false;
     void applyStyle(QPainter &painter) const
     {
         painter.setPen(QPen(m_stroke, m_width));
