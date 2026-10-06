@@ -41,3 +41,26 @@ void Document::removeShape(Shape *s)
                        { return p.get() == s; }),
         m_shapes.end());
 }
+
+std::unique_ptr<Shape> Document::takeShape(Shape* s) {
+    for (auto it = m_shapes.begin(); it != m_shapes.end(); ++it) {
+        if (it->get() == s) {
+            std::unique_ptr<Shape> owned = std::move(*it);
+            m_shapes.erase(it);
+            return owned;
+        }
+    }
+    return nullptr;
+}
+
+void Document::insertShape(std::size_t index, std::unique_ptr<Shape> shape) {
+    if (index > m_shapes.size()) index = m_shapes.size();
+    m_shapes.insert(m_shapes.begin() + index, std::move(shape));
+}
+
+std::size_t Document::indexOf(const Shape* s) const {
+    for (std::size_t i = 0; i < m_shapes.size(); ++i) {
+        if (m_shapes[i].get() == s) return i;
+    }
+    return m_shapes.size();
+}

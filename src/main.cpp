@@ -26,6 +26,10 @@ int main(int argc, char* argv[]) {
     addTool("Rectangle", Tool::Rect);
     addTool("Line", Tool::Line);
 
+        bar->addSeparator();
+    QObject::connect(bar->addAction("Undo"), &QAction::triggered, [canvas] { canvas->undo(); });
+    QObject::connect(bar->addAction("Redo"), &QAction::triggered, [canvas] { canvas->redo(); });
+    
     window.setWindowTitle("VectorForge");
     window.show();
     return app.exec();

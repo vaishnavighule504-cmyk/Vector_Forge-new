@@ -1,6 +1,8 @@
 #pragma once
 #include <QWidget>
+#include <memory>
 #include "Document.h"
+#include "UndoStack.h"
 
 enum class Tool { Select, Circle, Rect, Line };
 
@@ -8,6 +10,8 @@ class Canvas : public QWidget {
 public:
     explicit Canvas(QWidget* parent = nullptr);
     void setTool(Tool t);
+    void undo();
+    void redo();
 
 protected:
     void paintEvent(QPaintEvent* event) override;
@@ -20,10 +24,12 @@ private:
     void clearSelection();
 
     Document m_doc;
+    UndoStack m_undo;
     Tool m_tool = Tool::Select;
-    Shape* m_selected = nullptr;   // borrowed pointer, Document owns it
+    Shape* m_selected = nullptr;       // borrowed pointer
     bool m_dragging = false;
-    QPointF m_start;               // where the mouse went down
-    QPointF m_last;                // previous mouse position
-    std::unique_ptr<Shape> m_preview;  // shape being drawn right now
+    QPointF m_start;
+    QPointF m_last;
+    QPointF m_moveTotal;               // total distance moved during one drag
+    std::unique_ptr<Shape> m_preview;
 };
