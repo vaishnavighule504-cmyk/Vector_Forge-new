@@ -1,0 +1,6 @@
+set(__QT_DEPLOY_TARGET_VectorForge_FILE C:/dev/VectorForge-n/build-release/VectorForge.exe)
+set(__QT_DEPLOY_TARGET_VectorForge_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_VectorForge_RUNTIME_DLLS C:/msys64/ucrt64/bin/Qt6Widgets.dll;C:/msys64/ucrt64/bin/Qt6Gui.dll;C:/msys64/ucrt64/bin/Qt6Core.dll)
+set(__QT_DEPLOY_TARGET_Benchmark_FILE C:/dev/VectorForge-n/build-release/Benchmark.exe)
+set(__QT_DEPLOY_TARGET_Benchmark_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_Benchmark_RUNTIME_DLLS C:/msys64/ucrt64/bin/Qt6Widgets.dll;C:/msys64/ucrt64/bin/Qt6Gui.dll;C:/msys64/ucrt64/bin/Qt6Core.dll)

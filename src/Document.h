@@ -4,17 +4,21 @@
 #include <vector>
 #include "Shape.h"
 #include <QJsonObject>
+#include "Quadtree.h"
 
 // Owns every shape. When the Document dies, all shapes are freed automatically.
 class Document
 {
 public:
 
+    Shape* shapeAtLinear(const QPointF& p) const;   // old O(n) version, kept for benchmarks
+    void invalidateIndex() { m_dirty = true; }
+
     QJsonObject toJson() const;
     bool fromJson(const QJsonObject& o);   // replaces everything; false = invalid file
-    
+
     void removeShape(Shape* s);
-    void clear() { m_shapes.clear(); }
+        void clear() { m_shapes.clear(); m_dirty = true; }
 
         std::unique_ptr<Shape> takeShape(Shape* s);
     void insertShape(std::size_t index, std::unique_ptr<Shape> shape);
@@ -27,4 +31,8 @@ public:
 
 private:
     std::vector<std::unique_ptr<Shape>> m_shapes;
+
+        void rebuildIndex() const;
+    mutable std::unique_ptr<Quadtree> m_index;
+    mutable bool m_dirty = true;
 };

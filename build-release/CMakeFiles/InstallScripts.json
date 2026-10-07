@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/dev/VectorForge-n/build-release/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

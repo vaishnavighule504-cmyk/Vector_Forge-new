@@ -1,0 +1,4 @@
+N       linear (us/query)     quadtree (us/query)   speedup   build (ms)    mismatches
+1000    10.57                 0.39                  27.28     0.47          0
+10000   103.15                1.38                  74.50     5.27          0
+50000   578.53                6.54                  88.51     25.29         0

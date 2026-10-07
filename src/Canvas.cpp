@@ -29,12 +29,14 @@ void Canvas::clearSelection() {
 void Canvas::undo() {
     clearSelection();   // the selected shape might be about to leave the document
     m_undo.undo();
+    m_doc.invalidateIndex();
     update();
 }
 
 void Canvas::redo() {
     clearSelection();
     m_undo.redo();
+    m_doc.invalidateIndex();
     update();
 }
 
@@ -68,6 +70,7 @@ void Canvas::mouseMoveEvent(QMouseEvent* event) {
     case Tool::Select:
         if (m_selected) {
             m_selected->moveBy(pos - m_last);   // live movement while dragging
+            m_doc.invalidateIndex();
             m_moveTotal += pos - m_last;
         }
         break;

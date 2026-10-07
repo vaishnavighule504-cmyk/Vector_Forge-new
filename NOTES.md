@@ -51,3 +51,12 @@ Why does Document::fromJson build into a temporary vector first? If the file is 
 Why m_undo.clear() after loading? Old commands hold raw pointers to shapes that no longer exist, and using them would crash.
 Why does toJson live in each shape instead of one big function? Polymorphism again. A new shape type adds its own toJson and one else if in the factory, and nothing else changes.
 Why store the "version" number? So future file formats can still be read.
+
+
+****phase 6****
+Why does shapeAt loop from the end of the list in the linear version, and what does order do in the Quadtree version? Both give the topmost shape.
+Why do straddling shapes stay in the parent node? They don't fit fully in one child, and putting them in two would create duplicates.
+Why kMaxDepth? If many shapes sit at the same spot, splitting would never stop.
+Why is the index mutable and rebuilt lazily? A cache is not logical state of the document, and rebuilding only when needed avoids doing it on every change.
+What is the weakness? Rebuilding costs time after every change. An incremental update would be better, and you can mention that as an improvement.
+Is it really O(log n)? On average, for evenly spread shapes. If everything piles into one spot, it degrades toward O(n). Say this in interviews, because it shows depth.

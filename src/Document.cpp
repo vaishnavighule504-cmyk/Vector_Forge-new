@@ -5,6 +5,7 @@
 
 void Document::addShape(std::unique_ptr<Shape> shape)
 {
+    m_dirty = true;
     m_shapes.push_back(std::move(shape));
 }
 
@@ -22,7 +23,7 @@ void Document::draw(QPainter &painter) const
     }
 }
 
-Shape *Document::shapeAt(const QPointF &p) const
+Shape *Document::shapeAtLinear(const QPointF &p) const
 {
     // Search from the back: the last shape added is drawn on top.
     for (auto it = m_shapes.rbegin(); it != m_shapes.rend(); ++it)
@@ -37,6 +38,7 @@ Shape *Document::shapeAt(const QPointF &p) const
 
 void Document::removeShape(Shape *s)
 {
+    m_dirty = true;
     m_shapes.erase(
         std::remove_if(m_shapes.begin(), m_shapes.end(),
                        [s](const std::unique_ptr<Shape> &p)
@@ -45,6 +47,7 @@ void Document::removeShape(Shape *s)
 }
 
 std::unique_ptr<Shape> Document::takeShape(Shape* s) {
+    m_dirty = true;
     for (auto it = m_shapes.begin(); it != m_shapes.end(); ++it) {
         if (it->get() == s) {
             std::unique_ptr<Shape> owned = std::move(*it);
@@ -56,6 +59,7 @@ std::unique_ptr<Shape> Document::takeShape(Shape* s) {
 }
 
 void Document::insertShape(std::size_t index, std::unique_ptr<Shape> shape) {
+    m_dirty = true;
     if (index > m_shapes.size()) index = m_shapes.size();
     m_shapes.insert(m_shapes.begin() + index, std::move(shape));
 }
@@ -86,4 +90,37 @@ bool Document::fromJson(const QJsonObject& o) {
     }
     m_shapes = std::move(loaded);
     return true;
+}
+
+void Document::rebuildIndex() const {
+    QRectF bounds(0, 0, 1, 1);
+    bool first = true;
+    for (const auto& s : m_shapes) {
+        QRectF b = s->boundingRect().adjusted(-6, -6, 6, 6);   // pad for thin lines
+        bounds = first ? b : bounds.united(b);
+        first = false;
+    }
+    m_index = std::make_unique<Quadtree>(bounds.adjusted(-1, -1, 1, 1));
+    for (std::size_t i = 0; i < m_shapes.size(); ++i) {
+        QRectF box = m_shapes[i]->boundingRect().adjusted(-6, -6, 6, 6);
+        m_index->insert({m_shapes[i].get(), box, i});
+    }
+    m_dirty = false;
+}
+
+Shape* Document::shapeAt(const QPointF& p) const {
+    if (m_dirty || !m_index) rebuildIndex();
+
+    std::vector<Quadtree::Entry> candidates;
+    m_index->query(p, candidates);
+
+    Shape* best = nullptr;
+    std::size_t bestOrder = 0;
+    for (const auto& e : candidates) {
+        if (e.shape->contains(p) && (!best || e.order > bestOrder)) {
+            best = e.shape;
+            bestOrder = e.order;
+        }
+    }
+    return best;
 }
