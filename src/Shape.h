@@ -5,6 +5,8 @@
 #include <QPointF>
 #include <QRectF>
 #include <QString>
+#include <QJsonArray>
+#include <QJsonObject>
 
 // Abstract base class: you can't create a Shape directly,
 // only its children (Circle, Rect, ...).
@@ -21,6 +23,7 @@ public:
     virtual void moveBy(const QPointF &delta) = 0;
     virtual QRectF boundingRect() const = 0;
     virtual QString typeName() const = 0;
+    virtual QJsonObject toJson() const = 0;
 
     void setStrokeColor(const QColor &c) { m_stroke = c; }
     void setFillColor(const QColor &c) { m_fill = c; }
@@ -34,6 +37,12 @@ protected:
         painter.setBrush(m_fill);
     }
 
+        void writeStyle(QJsonObject& o) const {
+        o["stroke"] = m_stroke.name(QColor::HexArgb);
+        o["fill"] = m_fill.name(QColor::HexArgb);
+        o["width"] = m_width;
+    }
+    
     QColor m_stroke = Qt::black;
     QColor m_fill = Qt::white;
     double m_width = 2.0;

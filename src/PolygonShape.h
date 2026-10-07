@@ -12,7 +12,7 @@ public:
     void moveBy(const QPointF &delta) override;
     QRectF boundingRect() const override;
     QString typeName() const override { return QStringLiteral("Polygon"); }
-
+    QJsonObject toJson() const override;
 private:
     QPolygonF m_points;
 };

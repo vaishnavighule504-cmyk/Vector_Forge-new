@@ -7,6 +7,8 @@
 #include "Commands.h"
 #include "LineShape.h"
 #include "RectShape.h"
+#include <QFile> 
+ #include <QJsonDocument>
 
 Canvas::Canvas(QWidget* parent) : QWidget(parent) {
     setMinimumSize(800, 600);
@@ -113,4 +115,27 @@ void Canvas::keyPressEvent(QKeyEvent* event) {
         m_undo.push(std::make_unique<DeleteCommand>(m_doc, s));
         update();
     }
+}
+
+
+bool Canvas::saveToFile(const QString& path) const {
+    QFile f(path);
+    if (!f.open(QIODevice::WriteOnly)) return false;
+    f.write(QJsonDocument(m_doc.toJson()).toJson(QJsonDocument::Indented));
+    return true;
+}
+
+bool Canvas::loadFromFile(const QString& path) {
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly)) return false;
+    QJsonParseError err;
+    QJsonDocument d = QJsonDocument::fromJson(f.readAll(), &err);
+    if (err.error != QJsonParseError::NoError || !d.isObject()) return false;
+
+    clearSelection();                     // before shapes are destroyed
+    if (!m_doc.fromJson(d.object())) return false;
+    m_undo.clear();                       // old commands point at destroyed shapes
+    m_preview.reset();
+    update();
+    return true;
 }

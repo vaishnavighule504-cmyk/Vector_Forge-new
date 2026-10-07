@@ -22,3 +22,15 @@ QRectF PolygonShape::boundingRect() const
 {
     return m_points.boundingRect();
 }
+
+QJsonObject PolygonShape::toJson() const {
+    QJsonObject o;
+    o["type"] = typeName();
+    QJsonArray pts;
+    for (const QPointF& p : m_points) {
+        pts.append(QJsonArray{p.x(), p.y()});
+    }
+    o["points"] = pts;
+    writeStyle(o);
+    return o;
+}

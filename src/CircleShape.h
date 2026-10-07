@@ -11,7 +11,7 @@ public:
     void moveBy(const QPointF &delta) override;
     QRectF boundingRect() const override;
     QString typeName() const override { return QStringLiteral("Circle"); }
-
+        QJsonObject toJson() const override;
 private:
     QPointF m_center;
     double m_radius;

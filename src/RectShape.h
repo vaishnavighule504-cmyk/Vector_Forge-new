@@ -11,7 +11,7 @@ public:
     void moveBy(const QPointF &delta) override;
     QRectF boundingRect() const override;
     QString typeName() const override { return QStringLiteral("Rectangle"); }
-
+    QJsonObject toJson() const override;
 private:
     QRectF m_rect;
 };

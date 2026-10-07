@@ -12,7 +12,9 @@ public:
     void setTool(Tool t);
     void undo();
     void redo();
-
+       
+        bool saveToFile(const QString& path) const;
+    bool loadFromFile(const QString& path);
 protected:
     void paintEvent(QPaintEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;

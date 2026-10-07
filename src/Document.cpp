@@ -1,5 +1,7 @@
 #include "Document.h"
 #include <algorithm>
+#include <QJsonArray>
+#include "ShapeFactory.h"
 
 void Document::addShape(std::unique_ptr<Shape> shape)
 {
@@ -63,4 +65,25 @@ std::size_t Document::indexOf(const Shape* s) const {
         if (m_shapes[i].get() == s) return i;
     }
     return m_shapes.size();
+}
+
+QJsonObject Document::toJson() const {
+    QJsonArray arr;
+    for (const auto& s : m_shapes) arr.append(s->toJson());
+    QJsonObject o;
+    o["version"] = 1;
+    o["shapes"] = arr;
+    return o;
+}
+
+bool Document::fromJson(const QJsonObject& o) {
+    if (!o["shapes"].isArray()) return false;
+    std::vector<std::unique_ptr<Shape>> loaded;      // build into a temporary first
+    for (const QJsonValue& v : o["shapes"].toArray()) {
+        auto s = ShapeFactory::fromJson(v.toObject());
+        if (!s) return false;                        // bad file: current drawing untouched
+        loaded.push_back(std::move(s));
+    }
+    m_shapes = std::move(loaded);
+    return true;
 }

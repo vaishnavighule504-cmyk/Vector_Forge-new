@@ -35,3 +35,12 @@ QRectF LineShape::boundingRect() const
 {
     return QRectF(m_p1, m_p2).normalized();
 }
+
+QJsonObject LineShape::toJson() const {
+    QJsonObject o;
+    o["type"] = typeName();
+    o["p1"] = QJsonArray{m_p1.x(), m_p1.y()};
+    o["p2"] = QJsonArray{m_p2.x(), m_p2.y()};
+    writeStyle(o);
+    return o;
+}

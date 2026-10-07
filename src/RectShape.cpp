@@ -22,3 +22,11 @@ QRectF RectShape::boundingRect() const
 {
     return m_rect;
 }
+
+QJsonObject RectShape::toJson() const {
+    QJsonObject o;
+    o["type"] = typeName();
+    o["rect"] = QJsonArray{m_rect.x(), m_rect.y(), m_rect.width(), m_rect.height()};
+    writeStyle(o);
+    return o;
+}

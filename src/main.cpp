@@ -3,13 +3,15 @@
 #include <QToolBar>
 #include <QAction>
 #include <QActionGroup>
+#include <QFileDialog>
+#include <QMessageBox>
 #include "Canvas.h"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
     QMainWindow window;
-    Canvas* canvas = new Canvas(&window);  // Qt deletes it with the window
+    Canvas* canvas = new Canvas(&window);
     window.setCentralWidget(canvas);
 
     QToolBar* bar = window.addToolBar("Tools");
@@ -26,10 +28,25 @@ int main(int argc, char* argv[]) {
     addTool("Rectangle", Tool::Rect);
     addTool("Line", Tool::Line);
 
-        bar->addSeparator();
+    bar->addSeparator();
     QObject::connect(bar->addAction("Undo"), &QAction::triggered, [canvas] { canvas->undo(); });
     QObject::connect(bar->addAction("Redo"), &QAction::triggered, [canvas] { canvas->redo(); });
-    
+
+    bar->addSeparator();
+    QObject::connect(bar->addAction("Save"), &QAction::triggered, [&window, canvas] {
+        QString path = QFileDialog::getSaveFileName(&window, "Save drawing", "", "JSON files (*.json)");
+        if (path.isEmpty()) return;
+        if (!path.endsWith(".json")) path += ".json";
+        if (!canvas->saveToFile(path))
+            QMessageBox::warning(&window, "Save failed", "Could not write the file.");
+    });
+    QObject::connect(bar->addAction("Open"), &QAction::triggered, [&window, canvas] {
+        QString path = QFileDialog::getOpenFileName(&window, "Open drawing", "", "JSON files (*.json)");
+        if (path.isEmpty()) return;
+        if (!canvas->loadFromFile(path))
+            QMessageBox::warning(&window, "Open failed", "That file is not a valid VectorForge drawing.");
+    });
+
     window.setWindowTitle("VectorForge");
     window.show();
     return app.exec();

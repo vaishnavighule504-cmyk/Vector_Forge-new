@@ -45,3 +45,9 @@ Why push(cmd, false) for moves? The drag already moved the shape live. Running r
 Why does a new action clear the redo list? The old "future" no longer matches the current state.
 Why clearSelection() before undo? An undo can remove the selected shape from the document, and we don't want a stale highlight or pointer.
 
+ ****phase 5*****
+ What is the Factory pattern, and why use it here? ShapeFactory creates the right subclass from a type string, so the loading code doesn't depend on the concrete shape classes.
+Why does Document::fromJson build into a temporary vector first? If the file is half-broken, the current drawing isn't destroyed. It either loads fully or not at all.
+Why m_undo.clear() after loading? Old commands hold raw pointers to shapes that no longer exist, and using them would crash.
+Why does toJson live in each shape instead of one big function? Polymorphism again. A new shape type adds its own toJson and one else if in the factory, and nothing else changes.
+Why store the "version" number? So future file formats can still be read.

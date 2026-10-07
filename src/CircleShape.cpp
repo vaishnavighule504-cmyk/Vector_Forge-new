@@ -24,3 +24,12 @@ QRectF CircleShape::boundingRect() const
     return QRectF(m_center.x() - m_radius, m_center.y() - m_radius,
                   2 * m_radius, 2 * m_radius);
 }
+
+QJsonObject CircleShape::toJson() const {
+    QJsonObject o;
+    o["type"] = typeName();
+    o["center"] = QJsonArray{m_center.x(), m_center.y()};
+    o["radius"] = m_radius;
+    writeStyle(o);
+    return o;
+}

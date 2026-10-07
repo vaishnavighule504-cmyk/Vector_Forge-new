@@ -10,6 +10,7 @@ public:
     bool undo();
     bool redo();
 
+        void clear() { m_undo.clear(); m_redo.clear(); }
 private:
     std::vector<std::unique_ptr<Command>> m_undo;
     std::vector<std::unique_ptr<Command>> m_redo;

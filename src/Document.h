@@ -3,11 +3,16 @@
 #include <memory>
 #include <vector>
 #include "Shape.h"
+#include <QJsonObject>
 
 // Owns every shape. When the Document dies, all shapes are freed automatically.
 class Document
 {
 public:
+
+    QJsonObject toJson() const;
+    bool fromJson(const QJsonObject& o);   // replaces everything; false = invalid file
+    
     void removeShape(Shape* s);
     void clear() { m_shapes.clear(); }
 
