@@ -1,0 +1,24 @@
+********* Start testing of VectorForgeTests *********
+Config: Using QtTest library 6.11.2, Qt 6.11.2 (x86_64-little_endian-llp64 shared (dynamic) release build; by GCC 16.2.0), windows 11
+PASS   : VectorForgeTests::initTestCase()
+PASS   : VectorForgeTests::circleContains()
+PASS   : VectorForgeTests::rectContains()
+PASS   : VectorForgeTests::lineContains()
+PASS   : VectorForgeTests::polygonContains()
+PASS   : VectorForgeTests::moveByAllShapes()
+PASS   : VectorForgeTests::rectNormalizesNegativeSize()
+PASS   : VectorForgeTests::documentTopmostWins()
+PASS   : VectorForgeTests::documentEmptyQuery()
+PASS   : VectorForgeTests::quadtreeMatchesLinear()
+PASS   : VectorForgeTests::indexRefreshesAfterMove()
+PASS   : VectorForgeTests::addUndoRedo()
+PASS   : VectorForgeTests::deleteUndoKeepsZOrder()
+PASS   : VectorForgeTests::moveUndoRedo()
+PASS   : VectorForgeTests::newActionClearsRedo()
+PASS   : VectorForgeTests::undoOnEmptyStack()
+PASS   : VectorForgeTests::jsonRoundTrip()
+PASS   : VectorForgeTests::jsonUnknownTypeLeavesDocumentUntouched()
+PASS   : VectorForgeTests::jsonMissingShapesKey()
+PASS   : VectorForgeTests::cleanupTestCase()
+Totals: 20 passed, 0 failed, 0 skipped, 0 blacklisted, 17ms
+********* Finished testing of VectorForgeTests *********

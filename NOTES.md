@@ -60,3 +60,9 @@ Why kMaxDepth? If many shapes sit at the same spot, splitting would never stop.
 Why is the index mutable and rebuilt lazily? A cache is not logical state of the document, and rebuilding only when needed avoids doing it on every change.
 What is the weakness? Rebuilding costs time after every change. An incremental update would be better, and you can mention that as an improvement.
 Is it really O(log n)? On average, for evenly spread shapes. If everything piles into one spot, it degrades toward O(n). Say this in interviews, because it shows depth.
+
+
+To run these are the commands
+cmake -S . -B build -G Ninja
+cmake --build build
+./build/UnitTests.exe

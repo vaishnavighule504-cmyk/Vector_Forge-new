@@ -13,7 +13,7 @@ quickly in large scenes with a Quadtree spatial index.
 - Unlimited undo/redo (Ctrl+Z / Ctrl+Y) for add, delete and move
 - Save and open drawings as JSON; corrupt files are rejected without losing the current drawing
 - Quadtree hit-testing, benchmarked against a linear scan
-- [N] unit tests
+- 18 unit tests
 
 ## Design
 
